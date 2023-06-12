@@ -57,23 +57,24 @@ public class FileProc {
 	public void read() {
 		System.out.println("불러올 파일이름을 적어주세요.");
 		String fileName = sc.next();
-		String filename = "c://tmp"+fileName+".txt";
+		File filename = new File("c://tmp"+fileName+".txt");
 		Singleton s = Singleton.getInstance();
 		try {
-			FileReader fr = new FileReader(filename);
-			BufferedReader br = new BufferedReader(fr);
-			String str= "";
+			BufferedReader br = new BufferedReader(new FileReader(filename));
+			String str= br.readLine();
+			while(str !=null){
+				s.accounList.add(str);
 			
-			while((str = br.readLine())!=null){
-				String spilt[] =str.split("/");
-				
-				AccountDto dto = new AccountDto(spilt[0],spilt[1],spilt[2],Integer.parseInt(spilt[3]),spilt[4]);
-				s.accounList.add(dto);
-				System.out.println(dto);
+				str= br.readLine();
 			}
+			br.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		for (int i = 0; i < s.accounList.size(); i++) {
+			System.out.println(s.accounList.get(i));
+			
 		}
 		System.out.println("불러오기 완료");
 	}
