@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import dao.AccountDao;
 import dto.AccountDto;
+import file.FileProc;
 
 public class MainClass {
 
@@ -12,7 +13,7 @@ public class MainClass {
 		// TODO Auto-generated method stub
 		Scanner sc = new Scanner(System.in);
 		AccountDao dao = new AccountDao();
-		
+		FileProc fp = new FileProc();
 		
 		
 		boolean on = false;
@@ -45,12 +46,12 @@ public class MainClass {
 					case 5: 
 						dao.all();
 						break;
-	//				case 6: 
-	//					dao.insert();
-	//					break;
-	//				case 7: 
-	//					dao.insert();
-	//					break;
+					case 6: 
+						fp.write();
+						break;
+					case 7: 
+						fp.read();
+						break;
 					case 8: 
 						System.out.println("가계부를 종료합니다");
 						on = true;

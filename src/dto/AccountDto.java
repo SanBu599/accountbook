@@ -48,7 +48,13 @@ public class AccountDto {
 	}
 
 	public Integer getMoney() {
-		return Money;
+		if(IncomeSpending.equals("수입")) {
+			return +Money;
+		}
+		else if(IncomeSpending.equals("지출")) {
+			return -Money;
+		}
+		return null;
 	}
 
 	public void setMoney(Integer money) {
@@ -70,6 +76,9 @@ public class AccountDto {
 	}
 
 	
+	public String print() {
+		return Date+"/"+Purpose+"/"+IncomeSpending+"/"+Money+"/"+Memo;
+	}
 	
 	
 }

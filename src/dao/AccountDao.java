@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.Date;
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -21,7 +22,7 @@ public class AccountDao {
 	
 	public void insert() {		
 		System.out.println("입력을 시작합니다.");
-		System.out.println("날짜를 입력해주세요.");
+		System.out.println("날짜를 입력해주세요.(ex)2011/05/05");
 		String date = sc.next();
 		System.out.println("용도를 입력해주세요.");
 		String purpose = sc.next();
@@ -94,7 +95,7 @@ public class AccountDao {
 			System.out.println("1.용도 검색하기");
 			System.out.println("2.날짜 검색하기");
 			System.out.println("3.월별 검색하기");
-			System.out.println("4.기간별 검색하기");
+			System.out.println("4.기간별 금액합계 검색하기");
 			System.out.println("5.돌아가기");
 			System.out.println("(1~5) 숫자를 입력해주세요.");
 			
@@ -107,7 +108,7 @@ public class AccountDao {
 						select1(sel1);
 						break;
 					case 2:
-						System.out.println("검색할 날짜를 입력하세요");
+						System.out.println("검색할 날짜를 입력하세요.");
 						String day = sc.next();
 						select2(day);
 						break;
@@ -118,7 +119,8 @@ public class AccountDao {
 						break;
 					case 4:
 						System.out.println("검색할 기간을 입력하세요");
-						select4();
+						String period = sc.next();
+						select4(period);
 						break;
 					case 5:
 						on = true;
@@ -164,35 +166,54 @@ public class AccountDao {
 		}
 		
 	}
-	//날짜검색
+	// 일별검색
 	public void select2(String day){
-		Calendar cal = Calendar.getInstance();
+		
 		Singleton s = Singleton.getInstance();
 		for(int i = 0;i<s.accounList.size();i++) {
-			
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-		Date parsedDate = dateFormat.parse();
-		SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-		String day = dayFormat.format(parsedDate);
+			AccountDto dto = s.accounList.get(i);
+			String date[] = dto.getDate().split("/");
+			if(date[2].equals(day)) {
+				System.out.println(dto);
+			}
+			else {
+				System.out.println("입력한 값이 없습니다.");
+			}
 		}
 	}
 	//월별검색
-	public void select3(String month) {
-		Calendar cal = Calendar.getInstance();
+	public void select3(String month) {		
 		Singleton s = Singleton.getInstance();
+		for(int i = 0;i<s.accounList.size();i++) {
+			AccountDto dto = s.accounList.get(i);
+			String date[] = dto.getDate().split("/");
+			if(date[1].equals(month)) {
+				System.out.println(dto);
+			}
+			else {
+				System.out.println("입력한 값이 없습니다.");
+			}
+		}
+	}
+	//기간별 금액합계
+	public void select4(String month){
+		Integer sum = 0;
+		Singleton s = Singleton.getInstance();
+		String input[] = month.split("/");
+		SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy/MM/dd");
+		Calendar cal = Calendar.getInstance();
 		
 		for(int i = 0;i<s.accounList.size();i++) {
 			AccountDto dto = s.accounList.get(i);
-			String date = dto.getDate();
-			
+			String mon[] = dto.getDate().split("/");
+			cal.set(Integer.parseInt(mon[0]),(Integer.parseInt(mon[1])-1),Integer.parseInt(mon[2]));
+			if(mon[0].equals(input[0]) && mon[1].equals(input[1])) {
+			 sum += dto.getMoney();			 	 
+			}
 		}
-		
+		System.out.println(input[1]+"/"+cal.getActualMinimum(Calendar.DATE)+"~"+
+				input[1]+"/"+cal.getActualMaximum(Calendar.DATE)+"금액의 합계는 :" + sum +"원");
 	}
-	//기간별검색
-	public void select4(){
-		
-	}	
-	
 	//모두보기
 	public void all() {
 		Singleton s = Singleton.getInstance();
@@ -203,6 +224,11 @@ public class AccountDao {
 		for (int i = 0; i < s.accounList.size(); i++) {
 			System.out.println(s.accounList.get(i).toString());
 		}
+	}
+	
+	public void print() {
+		Singleton s = Singleton.getInstance();
+		
 	}
 	
 }
