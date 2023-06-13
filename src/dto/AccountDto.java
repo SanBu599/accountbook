@@ -77,7 +77,7 @@ public class AccountDto {
 
 	
 	public String print() {
-		return Date+"/"+Purpose+"/"+IncomeSpending+"/"+Money+"/"+Memo;
+		return Date+"-"+Purpose+"-"+IncomeSpending+"-"+Money+"-"+Memo;
 	}
 	
 	

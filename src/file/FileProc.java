@@ -6,9 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
-
 import dto.AccountDto;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -57,25 +55,28 @@ public class FileProc {
 	public void read() {
 		System.out.println("불러올 파일이름을 적어주세요.");
 		String fileName = sc.next();
-		File filename = new File("c://tmp"+fileName+".txt");
+		File filename = new File("c:\\tmp\\"+fileName+".txt");
 		Singleton s = Singleton.getInstance();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filename));
-			String str= br.readLine();
-			while(str !=null){
-				s.accounList.add(str);
-			
-				str= br.readLine();
+			String str = "";
+			while((str= br.readLine()) !=null){
+				String split[] = str.split("-");
+				
+				AccountDto dto = new AccountDto(split[0],split[1],split[2],Integer.parseInt(split[3]),split[4]);
+				s.accounList.add(dto);
+				System.out.println(dto);
 			}
 			br.close();
-		} catch (Exception e) {
+			
+		}catch (NumberFormatException e){
+			e.printStackTrace();
+			
+		}catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		for (int i = 0; i < s.accounList.size(); i++) {
-			System.out.println(s.accounList.get(i));
-			
-		}
+		} 
+		
 		System.out.println("불러오기 완료");
 	}
 }
